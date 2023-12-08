@@ -2,12 +2,14 @@
 
 namespace adlurfm\driverjs;
 
+use yii\helpers\Html;
 use yii\helpers\Json;
 
 class DriverJsWidget extends \yii\base\Widget
 {
     private $_asset;
     private $_use_button = false;
+    private $_button_id = "#driver-js-run-button";
     public $steps = [];
 
     public function __construct() {
@@ -55,15 +57,16 @@ class DriverJsWidget extends \yii\base\Widget
         return $this;
     }
 
-    public function useButton(){
+    public function useButton($button_id = "#driver-js-run-button"){
         $this->_use_button = true;
+        $this->_button_id = $button_id;
         return $this;
     }
 
     public function build(){
-        $steps = Json::encode($this->steps, $asArray = true);
+        $steps = Json::encode($this->steps);
         
-        $js_script_btn = ($this->_use_button) ? "$('#driver-js-run-button').click(function(){ driverObj.drive(); });" : "driverObj.drive();";
+        $js_script_btn = ($this->_use_button) ? "$('{$this->_button_id}').click(function(){ driverObj.drive(); });" : "driverObj.drive();";
 
         $js_script = <<< JS
             document.addEventListener('DOMContentLoaded', function() {
@@ -78,6 +81,10 @@ class DriverJsWidget extends \yii\base\Widget
         JS;
 
         $this->view->registerJs($js_script, \yii\web\View::POS_END); 
+    }
+
+    public static function helpButton($text = "", $id="driver-js-run-button"){
+        return Html::a('<i class="fas fa-question-circle"></i>'.$text, '#', ['class'=>'btn btn-xs btn-outline-primary', 'id'=>$id]);
     }
 
 }

@@ -5,7 +5,7 @@ namespace adlurfm\driverjs;
 
 class DriverJsAsset extends \yii\web\AssetBundle {
 
-    public $sourcePath = __DIR__.'\resources';
+    public $sourcePath = __DIR__.'/resources';
 
     public $css = [
         'css/driver.css',
